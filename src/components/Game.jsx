@@ -1,14 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export const Game = ({ step, totalSteps, question, onClickVariant }) => {
   const percentage = Math.round(((step + 1) / totalSteps) * 100);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [showResult, setShowResult] = useState(false);
+  const timerRef = useRef(null);
 
-  // 🔥 ВОТ ЭТОТ useEffect СБРАСЫВАЕТ ПОДСВЕТКУ ПРИ СМЕНЕ ВОПРОСА 🔥
+  // Сбрасываем при смене вопроса
   useEffect(() => {
     setSelectedIndex(null);
     setShowResult(false);
+    // Отменяем старый таймер, если он есть
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
   }, [step, question]);
 
   const handleClick = (index) => {
@@ -17,8 +23,10 @@ export const Game = ({ step, totalSteps, question, onClickVariant }) => {
     setSelectedIndex(index);
     setShowResult(true);
 
-    setTimeout(() => {
+    // Сохраняем таймер в ref, чтобы можно было отменить
+    timerRef.current = setTimeout(() => {
       onClickVariant(index);
+      timerRef.current = null;
     }, 1500);
   };
 
