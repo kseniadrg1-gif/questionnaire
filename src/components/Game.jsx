@@ -5,6 +5,7 @@ export const Game = ({ step, totalSteps, question, onClickVariant }) => {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [showResult, setShowResult] = useState(false);
 
+  // 🔥 ВОТ ЭТОТ useEffect СБРАСЫВАЕТ ПОДСВЕТКУ ПРИ СМЕНЕ ВОПРОСА 🔥
   useEffect(() => {
     setSelectedIndex(null);
     setShowResult(false);
@@ -12,9 +13,13 @@ export const Game = ({ step, totalSteps, question, onClickVariant }) => {
 
   const handleClick = (index) => {
     if (showResult) return;
+
     setSelectedIndex(index);
     setShowResult(true);
-    setTimeout(() => onClickVariant(index), 1500);
+
+    setTimeout(() => {
+      onClickVariant(index);
+    }, 1500);
   };
 
   const getItemClass = (index) => {
