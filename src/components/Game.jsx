@@ -5,7 +5,7 @@ export const Game = ({ step, totalSteps, question, onClickVariant }) => {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [showResult, setShowResult] = useState(false);
 
-  // Полный сброс при смене вопроса
+  // 🔥 ЭТО СБРАСЫВАЕТ ПОДСВЕТКУ ПРИ СМЕНЕ ВОПРОСА 🔥
   useEffect(() => {
     setSelectedIndex(null);
     setShowResult(false);
