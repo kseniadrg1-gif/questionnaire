@@ -1,21 +1,15 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 export const Game = ({ step, totalSteps, question, onClickVariant }) => {
   const percentage = Math.round(((step + 1) / totalSteps) * 100);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [showResult, setShowResult] = useState(false);
-  const timerRef = useRef(null);
 
-  // Сбрасываем при смене вопроса
+  // Полный сброс при смене вопроса
   useEffect(() => {
     setSelectedIndex(null);
     setShowResult(false);
-    // Отменяем старый таймер, если он есть
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-  }, [step, question]);
+  }, [step]);
 
   const handleClick = (index) => {
     if (showResult) return;
@@ -23,11 +17,9 @@ export const Game = ({ step, totalSteps, question, onClickVariant }) => {
     setSelectedIndex(index);
     setShowResult(true);
 
-    // Сохраняем таймер в ref, чтобы можно было отменить
-    timerRef.current = setTimeout(() => {
+    setTimeout(() => {
       onClickVariant(index);
-      timerRef.current = null;
-    }, 1500);
+    }, 1000);
   };
 
   const getItemClass = (index) => {
@@ -54,12 +46,10 @@ export const Game = ({ step, totalSteps, question, onClickVariant }) => {
             className={getItemClass(index)}
           >
             {text}
-            {showResult && index === question.correct && (
-              <span className="checkmark"> ✓</span>
-            )}
+            {showResult && index === question.correct && <span> ✓</span>}
             {showResult &&
               index === selectedIndex &&
-              index !== question.correct && <span className="cross"> ✗</span>}
+              index !== question.correct && <span> ✗</span>}
           </li>
         ))}
       </ul>
