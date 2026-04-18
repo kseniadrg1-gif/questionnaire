@@ -1,31 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export const Game = ({ step, totalSteps, question, onClickVariant }) => {
   const percentage = Math.round(((step + 1) / totalSteps) * 100);
-  const [selectedIndex, setSelectedIndex] = useState(null);
-  const [showResult, setShowResult] = useState(false);
-
-  // 🔥 ЭТО СБРАСЫВАЕТ ПОДСВЕТКУ ПРИ СМЕНЕ ВОПРОСА 🔥
-  useEffect(() => {
-    setSelectedIndex(null);
-    setShowResult(false);
-  }, [step]);
+  const [answered, setAnswered] = useState(false);
+  const [selected, setSelected] = useState(null);
 
   const handleClick = (index) => {
-    if (showResult) return;
-
-    setSelectedIndex(index);
-    setShowResult(true);
+    if (answered) return;
+    setAnswered(true);
+    setSelected(index);
 
     setTimeout(() => {
       onClickVariant(index);
-    }, 1000);
+    }, 800);
   };
 
-  const getItemClass = (index) => {
-    if (!showResult) return "";
+  const getClass = (index) => {
+    if (!answered) return "";
     if (index === question.correct) return "correct";
-    if (index === selectedIndex && index !== question.correct) return "wrong";
+    if (index === selected && index !== question.correct) return "wrong";
     return "";
   };
 
@@ -43,13 +36,13 @@ export const Game = ({ step, totalSteps, question, onClickVariant }) => {
           <li
             key={index}
             onClick={() => handleClick(index)}
-            className={getItemClass(index)}
+            className={getClass(index)}
           >
             {text}
-            {showResult && index === question.correct && <span> ✓</span>}
-            {showResult &&
-              index === selectedIndex &&
-              index !== question.correct && <span> ✗</span>}
+            {answered && index === question.correct && <span> ✓</span>}
+            {answered && index === selected && index !== question.correct && (
+              <span> ✗</span>
+            )}
           </li>
         ))}
       </ul>
