@@ -12,15 +12,8 @@ function App() {
   const question = Questions[step];
 
   const onClickVariant = (index) => {
-    if (index === question.correct) {
-      setCorrect(correct + 1);
-    }
-
-    if (step + 1 < Questions.length) {
-      setStep(step + 1);
-    } else {
-      setFinished(true);
-    }
+    if (index === question.correct) setCorrect(correct + 1);
+    step + 1 < Questions.length ? setStep(step + 1) : setFinished(true);
   };
 
   const onRestart = () => {

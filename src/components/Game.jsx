@@ -1,22 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const Game = ({ step, totalSteps, question, onClickVariant }) => {
   const percentage = Math.round(((step + 1) / totalSteps) * 100);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [showResult, setShowResult] = useState(false);
 
-  const handleClick = (index) => {
-    if (showResult) return; // чтобы нельзя было нажать повторно
+  useEffect(() => {
+    setSelectedIndex(null);
+    setShowResult(false);
+  }, [step, question]);
 
+  const handleClick = (index) => {
+    if (showResult) return;
     setSelectedIndex(index);
     setShowResult(true);
-
-    // Через 1.5 секунды переходим к следующему вопросу
-    setTimeout(() => {
-      onClickVariant(index);
-      setSelectedIndex(null);
-      setShowResult(false);
-    }, 1500);
+    setTimeout(() => onClickVariant(index), 1500);
   };
 
   const getItemClass = (index) => {
